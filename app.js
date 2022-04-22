@@ -2,7 +2,8 @@
 import express from "express";
 import morgan from "morgan";
 import dotenv from "dotenv";
-import bodyparser from "body-parser";
+import helmet from "helmet";
+import cors from "cors";
 import dbconnect from "./config/database.js";
 import routes from "./routes/routes.js";
 
@@ -11,7 +12,15 @@ dotenv.config({path: './config/.config.env'});
 
 //Initialize express
 const app = express();
+
+//Use json functions provided by express
 app.use(express.json());
+
+//Use helmet to secure HTTP headers
+app.use(helmet());
+
+//Use cors to enable cross orgin access
+app.use(cors());
 
 //Logging for dev mode
 if(process.env.NODE_ENV === "development"){
@@ -19,12 +28,7 @@ if(process.env.NODE_ENV === "development"){
 }
 
 //Settign the base url for all routes
-app.use("/user", routes);
-
-//Set home page route
-app.get("/", (req, res) => {
-    //res.send("Hi everyone!");
-});
+app.use("/", routes);
 
 //Connect database
 dbconnect();
