@@ -1,67 +1,52 @@
 import user from "./model/user.js";
 import userModel from "./model/user.js";
-import dbconnect from "./config/database.js";
+import argon2id from "argon2";
+import dbconnect from "./config/dbconnect.js";
 
 const userController = new Object();
 
 //User sign up logic
-userController.createUser = (request, response, next) => {
-    // return new Promise(function(resolve, reject){
-    //     userModel.create({
-    //         username: "pooja",
-    //         password: "pepper"
-    //     }, function(err, createdUser){
-    //         if(err){
-    //             reject(err);
-    //             return;
-    //         }
-    //         console.log(createdUser);
-    //         resolve(createdUser);
-    //     });
-    // });
-    // let user = new userModel(request.body).save().then(function(err, results){
-    //     if (err) { return next(err) }
-    //     response.json(201, results);
-    // });
-    dbconnect();
-    userModel.create(request.body).then((value) => {
-        console.log("success", value);
-    }, (reason) => {
-        console.log(reason);
-    })
-    
-    //console.log(user);
-    
-    // try{
-    //     userModel.create({
-    //         username: "pooja",
-    //         password: "pepper"
-    //     }, (err, result) => {
-    //         if(err) {
-    //           console.log(err.message);
-    //         } else {
-    //             console.log("results", result);
-    //         }
+userController.createUser = async (request, response) => { 
+    //Get new user
+    const newUser = request.body;
 
-    //     });
-    //     // userModel.create(req.body).then((res) => {
-    //     //     console.log("resolved");
-    //     // }, (reject) => {
-    //     //     console.log("rejected");
-    //     // })
-    // } catch(err) {
-    //     console.log(err);
-    // }
-    
-    // console.log("in user create request");
-    //res.send(`User ${user.username} created.`);
+    //Create password hash
+    try {
+        const hashedPassword = await argon2id.hash(newUser.password, {hashLength: 50, parallelism: 2, timeCost: 4, saltLength: 32});   
+        newUser.password = hashedPassword;
+    } catch(err){
+        console.log("Error hashing password: ",err.message);
+        response.send("Error securing password");
+    }
+
+    //Call user create function with the new user object
+    const createResponse = await dbconnect.createUser(newUser);
+    if(createResponse.success){
+        console.log("in user create success");
+        response.send(`User ${newUser.username} created.`);
+    } else {
+        console.log(createResponse.value);
+        response.send("User creation failed with error:", createResponse.value);
+    }
 };
 
 //User login
-userController.login = (req, res) => {
-    const user = req.body;
-    console.log(user.username);
-    res.send(`User ${user.username} just logged in.`);
+userController.login = async (request, response) => {
+    const user = request.body;
+
+    // //Create password hash
+    // const hashedPassword = argon2id.hash(user.password, {hashLength: 50, parallelism: 2, timeCost: 4, saltLength: 32});   
+    // user.password = hashedPassword;
+
+    //Call user create function with the new user object
+    const loginResponse = await dbconnect.loginUser(user);
+    if(loginResponse.success){
+        console.log("User login success");
+        response.send(`User ${user.username} just logged in.`);
+    } else {
+        console.log(loginResponse.value);
+        response.send("User login failed with error: ",loginResponse.value);
+    }
 };
 
 //User logout

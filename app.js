@@ -4,7 +4,7 @@ import morgan from "morgan";
 import dotenv from "dotenv";
 import helmet from "helmet";
 import cors from "cors";
-import dbconnect from "./config/database.js";
+import dbconnect from "./config/dbconnect.js";
 import routes from "./routes/routes.js";
 
 //Read config file
