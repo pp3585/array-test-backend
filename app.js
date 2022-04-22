@@ -3,11 +3,11 @@ const express = require("express");
 const dotenv = require("dotenv");
 const connectDb = require("./config/database");
 
+//Read config file
+dotenv.config({path: './config/.config.env'});
+
 //Initialize express
 const app = express();
-
-//Read config file
-dotenv.config({path: '.config/config.env'});
 
 //Connect database
 connectDb();
