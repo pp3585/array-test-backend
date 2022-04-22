@@ -11,6 +11,7 @@ dotenv.config({path: './config/.config.env'});
 
 //Initialize express
 const app = express();
+app.use(express.json());
 
 //Logging for dev mode
 if(process.env.NODE_ENV === "development"){
@@ -18,7 +19,7 @@ if(process.env.NODE_ENV === "development"){
 }
 
 //Settign the base url for all routes
-app.use("/users", routes);
+app.use("/user", routes);
 
 //Set home page route
 app.get("/", (req, res) => {
