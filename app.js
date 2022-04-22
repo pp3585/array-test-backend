@@ -31,7 +31,7 @@ if(process.env.NODE_ENV === "development"){
 app.use("/", routes);
 
 //Connect database
-dbconnect();
+//dbconnect();
 
 //PORT is read from the config file
 const PORT = process.env.PORT || 5000

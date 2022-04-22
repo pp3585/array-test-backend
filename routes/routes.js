@@ -1,16 +1,21 @@
 import express from "express";
-import userController from "../userController";
+import userController from "../userController.js";
 
 //Get the router provided by express
 const routes = express.Router();
 
-//Define routes
-//Route when home page is accessed
+//Default route when base url is accessed
 routes.get("/", (req, res) => {
-    res.send("Hi everyone!");
+    console.log("Homepage reached!");
 });
 
 //Route to sign up a new user
-routes.post("/createUser", userController.createUser);
+routes.post("/signup", userController.createUser);
+
+//Route when a user logs in
+routes.post("/login", userController.login);
+
+//Route when a user logs out
+routes.post("/logout", userController.logout);
 
 export default routes;

@@ -1,26 +1,6 @@
 {
-  "name": "array-test-backend",
-  "description": "An API collection to securely sign up, login and logout",
-  "version": "1.0.0",
-  "main": "app.js",
-  "type": "module",
-  "scripts": {
-    "start": "cross-env NODE_ENV=production node app",
-    "dev": "cross-env NODE_ENV=development nodemon app"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/pp3585/array-test-backend.git"
-  },
-  "author": "Pooja Prasad",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/pp3585/array-test-backend/issues"
-  },
-  "homepage": "https://github.com/pp3585/array-test-backend#readme",
   "dependencies": {
-    "body-parser": "^1.20.0",
-    "connect-mongo": "^4.6.0",
+    "argon2": "^0.28.5",
     "cors": "^2.8.5",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
